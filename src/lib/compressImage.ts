@@ -2,16 +2,16 @@ import imageCompression from 'browser-image-compression';
 
 export async function compressImage(imageFile: File): Promise<File> {
   const options = {
-    maxSizeMB: 1, // أقصى حجم للصورة بعد الضغط (1 ميجابايت)
-    maxWidthOrHeight: 1920, // أقصى عرض أو ارتفاع (بيصغر الصور الكبيرة)
-    useWebWorker: true, // يستخدم خيط جانبي عشان ما يعلق المتصفح
+    maxSizeMB: 1, // Maximum image size after compression (1 MB)
+    maxWidthOrHeight: 1920, // Maximum width or height (shrinks large images)
+    useWebWorker: true, // Uses a web worker to prevent browser freezing
   };
 
   try {
     const compressedFile = await imageCompression(imageFile, options);
     return compressedFile;
   } catch (error) {
-    console.error("خطأ أثناء ضغط الصورة:", error);
-    return imageFile; // إذا فشل الضغط، يرجع الصورة الأصلية
+    console.error("Error while compressing image:", error);
+    return imageFile; // If compression fails, return the original image
   }
 }

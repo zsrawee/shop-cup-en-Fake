@@ -31,36 +31,36 @@ const ProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  images: [String], // مصفوفة لروابط الصور
+  images: [String], // Array of image URLs
   category: String,
   stock: { type: Number, default: 0 },
   
-  // الربط بالبائع (هذا هو الجسر)
+  // Linking to the seller (this is the bridge)
   seller: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true 
   },
   
-// نظام التقييمات
+// Ratings system
   ratings: [
     {
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      userName: String, // تخزين الاسم هنا يقلل من الـ populate ويسرع العرض
+      userName: String, // Storing the name here reduces populate calls and speeds up display
       rating: { type: Number, required: true, min: 1, max: 5 },
       comment: String,
       createdAt: { type: Date, default: Date.now }
     }
   ],
   
-  // حقول مخزنة لسرعة الاستعلام (Denormalization)
-  averageRating: { type: Number, default: 0 }, // متوسط النجوم (مثلاً 4.5)
-  numberOfReviews: { type: Number, default: 0 }, // إجمالي عدد الأشخاص اللي قيموا
+  // Stored fields for query speed (Denormalization)
+  averageRating: { type: Number, default: 0 }, // Average stars (e.g., 4.5)
+  numberOfReviews: { type: Number, default: 0 }, // Total number of people who rated
 
   createdAt: { type: Date, default: Date.now }
 });
 
-// تعريف الدالة داخل الـ Statics في Schema الخاص بك
+// Define the function inside Statics in your Schema
 ProductSchema.statics.calculateAverage = async function(productId: string) {
   const product = await this.findById(productId);
 
@@ -74,7 +74,7 @@ ProductSchema.statics.calculateAverage = async function(productId: string) {
       numberOfReviews
     });
   } else {
-    // في حال تم حذف كل التقييمات، نصفر القيم
+    // In case all ratings are deleted, we reset the values
     await this.findByIdAndUpdate(productId, {
       averageRating: 0,
       numberOfReviews: 0

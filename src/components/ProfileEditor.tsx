@@ -5,7 +5,7 @@ import { changeName, changeDesc, changeImage } from "@/actions/profileActions";
 import { compressImage } from "@/lib/compressImage";
 import { uploadImageToCloud } from "@/lib/uploadImage";
 
-// تعريف نوع المستخدم (يجب أن يتطابق مع البيانات القادمة)
+// User type definition (must match the incoming data)
 interface User {
   _id: { toString(): string } | string;
   name: string;
@@ -15,7 +15,7 @@ interface User {
   } | null;
 }
 
-// تعريف نوع دالة الإجراء
+// Action function type definition
 type ProfileAction = (value: string) => Promise<void>;
 
 export default function ProfileEditor({ user }: { user: User }) {
@@ -28,7 +28,7 @@ export default function ProfileEditor({ user }: { user: User }) {
 
   const [editingField, setEditingField] = useState<string | null>(null);
 
-  // ✅ دالة حفظ أي حقل (الاسم أو الوصف)
+  // ✅ Save function for any field (name or description)
   const handleSave = (action: ProfileAction, value: string) => {
     startTransition(async () => {
       await action(value);
@@ -36,7 +36,7 @@ export default function ProfileEditor({ user }: { user: User }) {
     });
   };
 
-  // ✅ دالة رفع الصورة
+  // ✅ Upload image function
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -48,7 +48,7 @@ export default function ProfileEditor({ user }: { user: User }) {
       setAvatar(imageUrl);
       await changeImage(imageUrl);
     } catch (error) {
-      alert("حدث خطأ أثناء رفع الصورة");
+      alert("An error occurred while uploading the image");
     } finally {
       setIsUploading(false);
       setEditingField(null);
@@ -57,9 +57,9 @@ export default function ProfileEditor({ user }: { user: User }) {
 
   return (
     <div className="space-y-4 border-t pt-6 mt-6">
-      <h3 className="text-lg font-bold text-gray-800">إعدادات الملف الشخصي</h3>
+      <h3 className="text-lg font-bold text-gray-800">Profile Settings</h3>
 
-      {/* تعديل الصورة */}
+      {/* Edit Image */}
       <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
         <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold overflow-hidden">
           {avatar ? (
@@ -71,7 +71,7 @@ export default function ProfileEditor({ user }: { user: User }) {
         </div>
 
         <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-700 transition">
-          {isUploading ? "جاري الضغط والرفع..." : "تغيير الصورة 📷"}
+          {isUploading ? "Compressing and uploading..." : "Change Image 📷"}
           <input
             type="file"
             accept="image/*"
@@ -82,7 +82,7 @@ export default function ProfileEditor({ user }: { user: User }) {
         </label>
       </div>
 
-      {/* تعديل الاسم */}
+      {/* Edit Name */}
       <div className="p-3 bg-gray-50 rounded-xl">
         {editingField === "name" ? (
           <div className="flex gap-2">
@@ -90,7 +90,7 @@ export default function ProfileEditor({ user }: { user: User }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="اكتب اسمك الجديد"
+              placeholder="Type your new name"
               className="flex-1 border border-gray-300 p-2 rounded-lg text-sm bg-white text-gray-900 placeholder:text-gray-400"
             />
             <button
@@ -98,27 +98,27 @@ export default function ProfileEditor({ user }: { user: User }) {
               disabled={isPending}
               className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm"
             >
-              {isPending ? "جاري..." : "حفظ"}
+              {isPending ? "Saving..." : "Save"}
             </button>
           </div>
         ) : (
           <div className="flex justify-between items-center">
             <p className="font-medium">{name}</p>
             <button onClick={() => setEditingField("name")} className="text-blue-600 text-sm font-semibold">
-              تعديل الاسم ✏️
+              Edit Name ✏️
             </button>
           </div>
         )}
       </div>
 
-      {/* تعديل الوصف */}
+      {/* Edit Description */}
       <div className="p-3 bg-gray-50 rounded-xl">
         {editingField === "desc" ? (
           <div className="flex gap-2">
             <textarea
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
-              placeholder="اكتب وصفاً مختصراً عنك أو عن متجرك..."
+              placeholder="Write a brief description of yourself or your store..."
               className="flex-1 border border-gray-300 p-2 rounded-lg text-sm bg-white text-gray-900 placeholder:text-gray-400"
               rows={2}
             />
@@ -127,14 +127,14 @@ export default function ProfileEditor({ user }: { user: User }) {
               disabled={isPending}
               className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm h-fit"
             >
-              {isPending ? "جاري..." : "حفظ"}
+              {isPending ? "Saving..." : "Save"}
             </button>
           </div>
         ) : (
           <div className="flex justify-between items-center">
-            <p className="text-gray-600 text-sm">{desc || "لا يوجد وصف بعد..."}</p>
+            <p className="text-gray-600 text-sm">{desc || "No description yet..."}</p>
             <button onClick={() => setEditingField("desc")} className="text-blue-600 text-sm font-semibold">
-              تعديل الوصف 📝
+              Edit Description 📝
             </button>
           </div>
         )}

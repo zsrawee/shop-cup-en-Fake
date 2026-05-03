@@ -10,9 +10,9 @@ export default function AdminActionsForm() {
 
   const handleDeleteUser = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) return alert("الرجاء إدخال الرابط");
+    if (!url.trim()) return alert("Please enter the link");
     
-    const confirmDelete = confirm("⚠️ هل أنت متأكد من حذف هذا المستخدم وجميع منتجاته وصوره؟ لا يمكن التراجع!");
+    const confirmDelete = confirm("⚠️ Are you sure you want to delete this user and all their products and images? This cannot be undone!");
     if (!confirmDelete) return;
 
     setMessage(null);
@@ -29,9 +29,9 @@ export default function AdminActionsForm() {
 
   const handleDeleteProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) return alert("الرجاء إدخال الرابط");
+    if (!url.trim()) return alert("Please enter the link");
     
-    const confirmDelete = confirm("⚠️ هل أنت متأكد من حذف هذا المنتج وصوره من كل السلات؟ لا يمكن التراجع!");
+    const confirmDelete = confirm("⚠️ Are you sure you want to delete this product and its images from all carts? This cannot be undone!");
     if (!confirmDelete) return;
 
     setMessage(null);
@@ -49,18 +49,18 @@ export default function AdminActionsForm() {
   return (
     <form className="space-y-4">
       <div>
-        <label className="block text-sm font-bold text-gray-700 mb-2">رابط البروفايل أو المنتج</label>
+        <label className="block text-sm font-bold text-gray-700 mb-2">Profile or Product Link</label>
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="مثال: https://mystore.com/profile/ahmed أو /product/65ab..."
+          placeholder="Example: https://mystore.com/profile/ahmed or /product/65ab..."
           className="w-full border border-gray-300 p-3 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-red-500 outline-none"
           required
         />
       </div>
 
-      {/* رسائل النجاح أو الخطأ */}
+      {/* Success or error messages */}
       {message && (
         <div className={`p-4 rounded-xl text-sm font-semibold ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
           {message.text}
@@ -74,7 +74,7 @@ export default function AdminActionsForm() {
           disabled={isPending}
           className="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition disabled:opacity-50"
         >
-          {isPending ? "جاري الحذف..." : "🗑️ حذف المستخدم"}
+          {isPending ? "Deleting..." : "🗑️ Delete User"}
         </button>
         
         <button
@@ -83,7 +83,7 @@ export default function AdminActionsForm() {
           disabled={isPending}
           className="flex-1 bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition disabled:opacity-50"
         >
-          {isPending ? "جاري الحذف..." : "🗑️ حذف المنتج"}
+          {isPending ? "Deleting..." : "🗑️ Delete Product"}
         </button>
       </div>
     </form>

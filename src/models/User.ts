@@ -82,7 +82,7 @@ const UserSchema = new Schema<IUserDocument, IUserModel>({
   createdAt: { type: Date, default: Date.now }
 });
 
-// إذا أردت أن ترى منتجات البائع داخل كائن المستخدم برمجياً
+// If you want to see the seller's products inside the user object programmatically
 UserSchema.virtual('products', {
   ref: 'Product',
   localField: '_id',

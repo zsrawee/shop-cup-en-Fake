@@ -30,7 +30,7 @@ export default async function PublicProfile({ params }: { params: { username: st
     <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center" dir="rtl">
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
         
-        {/* === قسم رأس الملف الشخصي === */}
+        {/* === Profile Header Section === */}
         <div className="flex items-center gap-6 mb-6">
           <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-3xl text-white font-bold overflow-hidden border-4 border-white shadow-md flex-shrink-0">
             {userProfile.avatar ? (
@@ -42,77 +42,77 @@ export default async function PublicProfile({ params }: { params: { username: st
           
           <div>
             <h1 className="text-3xl font-extrabold text-gray-900">{userProfile.name}</h1>
-            <p className="text-gray-500 text-sm">عضو منذ {new Date(userProfile.createdAt).toLocaleDateString('ar-EG')}</p>
+            <p className="text-gray-500 text-sm">Member since {new Date(userProfile.createdAt).toLocaleDateString('en-US')}</p>
             {userProfile.role === 'seller' && (
               <span className="mt-1 inline-block bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                بائع موثوق {userProfile.sellerInfo?.isVerified ? '✅' : ''}
+                Verified Seller {userProfile.sellerInfo?.isVerified ? '✅' : ''}
               </span>
             )}
           </div>
         </div>
 
-        {/* === معلومات المتجر === */}
+        {/* === Store Information === */}
         {userProfile.role === 'seller' && (userProfile.sellerInfo?.storeName || userProfile.sellerInfo?.description) && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {userProfile.sellerInfo?.storeName && (
               <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                <h3 className="text-sm text-blue-500 mb-1">اسم المتجر</h3>
+                <h3 className="text-sm text-blue-500 mb-1">Store Name</h3>
                 <p className="font-bold text-blue-900">{userProfile.sellerInfo.storeName}</p>
               </div>
             )}
             {userProfile.sellerInfo?.description && (
               <div className="p-4 bg-gray-50 rounded-2xl md:col-span-2">
-                <h3 className="text-sm text-gray-500 mb-1">نبذة عن المتجر</h3>
+                <h3 className="text-sm text-gray-500 mb-1">About the Store</h3>
                 <p className="text-gray-700 text-sm">{userProfile.sellerInfo.description}</p>
               </div>
             )}
           </div>
         )}
 
-        {/* === أداة التعديل === */}
+        {/* === Editor Tool === */}
         {isOwner && (
           <ProfileEditor user={JSON.parse(JSON.stringify(userProfile))} />
         )}
 
-        {/* === قسم المنتجات === */}
+        {/* === Products Section === */}
         {userProfile.role === 'seller' && (
           <div className="mt-8 border-t pt-6">
             
-            {/* ✅✅ التعديل هنا: أضفنا زر لوحة التحكم بجانب زر الإضافة ✅✅ */}
+            {/* ✅✅ Edit here: Added dashboard button next to add button ✅✅ */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">المنتجات ({sellerProducts.length})</h2>
+              <h2 className="text-xl font-bold text-gray-800">Products ({sellerProducts.length})</h2>
               
               {isOwner && (
                 <div className="flex gap-2">
-                  {/* الزر الجديد: يوديه لصفحة الحذف والإدارة */}
+                  {/* New button: redirects to delete and manage page */}
                   <Link 
                     href="/seller" 
                     className="text-sm bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-800 transition flex items-center gap-1"
                   >
-                    إدارة المنتجات 📊
+                    Manage Products 📊
                   </Link>
-                  {/* زر الإضافة السابق */}
+                  {/* Previous add button */}
                   <Link 
                     href="/product/add" 
                     className="text-sm bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition flex items-center gap-1"
                   >
-                    إضافة منتج ➕
+                    Add Product ➕
                   </Link>
                 </div>
               )}
             </div>
-            {/* ✅✅ نهاية التعديل ✅✅ */}
+            {/* ✅✅ End of edit ✅✅ */}
 
             {sellerProducts.length === 0 ? (
               <div className="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                 <div className="text-4xl mb-3">📦</div>
-                <p className="text-gray-500 mb-5">لم يتم إضافة منتجات بعد</p>
+                <p className="text-gray-500 mb-5">No products added yet</p>
                 {isOwner && (
                   <Link 
                     href="/product/add" 
                     className="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition inline-block"
                   >
-                    أضف منتجك الأول الآن 🚀
+                    Add your first product now 🚀
                   </Link>
                 )}
               </div>
@@ -124,7 +124,7 @@ export default async function PublicProfile({ params }: { params: { username: st
 
         {!isOwner && userProfile.role !== 'seller' && (
           <p className="mt-6 text-center text-sm text-gray-400">
-            أنت تشاهد ملف {userProfile.name} كزائر.
+            You are viewing {userProfile.name}'s profile as a visitor.
           </p>
         )}
       </div>

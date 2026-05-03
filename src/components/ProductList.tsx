@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-// تعريف نوع المنتج
+// Product type definition
 interface Product {
   _id: { toString(): string } | string;
   title: string;
@@ -13,10 +13,10 @@ interface Product {
 
 export function ProductCard({ product }: { product: any }) {
   return (
-    // ✅ لفنا الكارد بالكامل برابط يودي لصفحة تفاصيل المنتج
+    // ✅ Wrapped the card in a link to the product details page
     <Link href={`/products/${product._id.toString()}`} className="block">
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 group h-full flex flex-col">
-        {/* صورة المنتج */}
+        {/* Product Image */}
         <div className="w-full h-48 bg-gray-100 overflow-hidden">
           {product.images && product.images.length > 0 ? (
             <img 
@@ -31,7 +31,7 @@ export function ProductCard({ product }: { product: any }) {
           )}
         </div>
         
-        {/* تفاصيل المنتج */}
+        {/* Product Details */}
         <div className="p-4 flex-1 flex flex-col">
           <h3 className="font-bold text-gray-900 truncate mb-2">{product.title}</h3>
           <div className="mt-auto flex justify-between items-center">
@@ -48,12 +48,12 @@ export function ProductCard({ product }: { product: any }) {
 }
 
 
-// ✅ مكون القائمة الذي يرتب المنتجات (الشبكة)
+// ✅ List component that arranges products (Grid)
 export default function ProductList({ products }: { products: Product[] }) {
   if (!products || products.length === 0) {
     return (
       <div className="text-center py-10 text-gray-400">
-        لا توجد منتجات حالياً.
+        No products available currently.
       </div>
     );
   }

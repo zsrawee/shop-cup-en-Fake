@@ -21,9 +21,9 @@ export default async function SellerChangePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4" dir="rtl">
       <div className="w-full max-w-xl bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-6 text-center">إدارة رتبة البائع</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900 mb-6 text-center">Manage Seller Role</h1>
         
-        {/* نمرر الـ ID والدور الحالي من قاعدة البيانات */}
+        {/* Pass the ID and current role from the database */}
         <SellerChangeForm 
           currentRole={user.role} 
         />

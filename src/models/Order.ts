@@ -7,7 +7,7 @@ const OrderSchema = new mongoose.Schema({
     {
       product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       quantity: Number,
-      price: Number // نخزن السعر وقت الشراء لأنه قد يتغير لاحقاً
+      price: Number // We store the price at the time of purchase because it might change later
     }
   ],
   totalAmount: Number,

@@ -32,7 +32,7 @@ export default function ProductList() {
         setProducts(data);
         setLoading(false);
       } catch (err: unknown) {
-        setError((err as Error)?.message || 'حدث خطأ أثناء جلب المنتجات');
+        setError((err as Error)?.message || 'An error occurred while fetching products');
         setLoading(false);
       }
     };
@@ -42,10 +42,10 @@ export default function ProductList() {
 
   return (
     <section className="max-w-7xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 ">المنتجات</h1>
+      <h1 className="text-2xl font-bold mb-6 ">Products</h1>
 
-      {loading && <p>جارِ التحميل...</p>}
-      {error && <p className="text-red-400">حدث خطأ أثناء جلب المنتجات</p>}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-400">An error occurred while fetching products</p>}
 
       {!loading && !error && (
         <div className='products' >

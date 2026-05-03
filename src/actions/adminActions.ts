@@ -7,72 +7,72 @@ import { Product } from "@/models/Product";
 import { deleteImageFromServer } from "./deleteImage";
 import { revalidatePath } from "next/cache";
 
-// دالة للتحقق أن المستخدم أدمن
+// Function to check if the user is an admin
 async function checkAdmin() {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("غير مصرح لك، يجب تسجيل الدخول");
+  if (!session?.user?.email) throw new Error("Unauthorized, you must log in");
   
   await connectToDB();
   const user = await User.findOne({ email: session.user.email });
-  if (!user || user.role !== "admin") throw new Error("غير مصرح لك، أنت لست أدمن!");
+  if (!user || user.role !== "admin") throw new Error("Unauthorized, you are not an admin!");
   
   return user;
 }
 
-// 1. حذف مستخدم عبر رابط البروفايل
+// 1. Delete user via profile link
 export async function adminDeleteUser(url: string) {
-  await checkAdmin(); // التحقق من الأدمن
+  await checkAdmin(); // Verify admin
 
-  // استخراج الـ username من الرابط (مثال: /profile/ahmed123 -> ahmed123)
+  // Extract username from link (example: /profile/ahmed123 -> ahmed123)
   const parts = url.split("/");
   const username = parts[parts.length - 1];
 
-  if (!username) throw new Error("الرابط غير صحيح");
+  if (!username) throw new Error("Invalid link");
 
   const user = await User.findOne({ username });
-  if (!user) throw new Error("المستخدم غير موجود في النظام");
+  if (!user) throw new Error("User not found in the system");
 
-  // 1. حذف جميع منتجات البائع (إذا كان بائعاً)
+  // 1. Delete all seller products (if they are a seller)
   const products = await Product.find({ seller: user._id });
   for (const product of products) {
     for (const img of product.images) {
-      await deleteImageFromServer(img); // حذف صور المنتجات من السيرفر
+      await deleteImageFromServer(img); // Delete product images from the server
     }
   }
   await Product.deleteMany({ seller: user._id });
 
-  // 2. حذف صورة البروفايل
+  // 2. Delete profile image
   if (user.avatar) await deleteImageFromServer(user.avatar);
 
-  // 3. حذف المستخدم نفسه
+  // 3. Delete the user themselves
   await User.findByIdAndDelete(user._id);
 
   revalidatePath("/admin");
-  return { success: true, message: `تم حذف المستخدم ${username} وجميع منتجاته وصوره بنجاح` };
+  return { success: true, message: `User ${username} and all their products and images have been deleted successfully` };
 }
 
-// 2. حذف منتج عبر رابط المنتج
+// 2. Delete product via product link
 export async function adminDeleteProduct(url: string) {
-  await checkAdmin(); // التحقق من الأدمن
+  await checkAdmin(); // Verify admin
 
-  // استخراج الـ ID من الرابط (مثال: /product/65ab... -> 65ab...)
+  // Extract ID from link (example: /product/65ab... -> 65ab...)
   const parts = url.split("/");
   const productId = parts[parts.length - 1];
 
-  if (!productId) throw new Error("الرابط غير صحيح");
+  if (!productId) throw new Error("Invalid link");
 
   const product = await Product.findById(productId);
-  if (!product) throw new Error("المنتج غير موجود");
+  if (!product) throw new Error("Product not found");
 
-  // 1. حذف صور المنتج من السيرفر
+  // 1. Delete product images from the server
   for (const img of product.images) {
     await deleteImageFromServer(img);
   }
 
-  // 2. حذف المنتج من قاعدة البيانات
+  // 2. Delete product from the database
   await Product.findByIdAndDelete(productId);
 
-  // 3. إزالة المنتج من سلة ومفضلة جميع المستخدمين (تنظيف الداتابيز)
+  // 3. Remove product from all users' carts and wishlists (database cleanup)
   await User.updateMany(
     {},
     { 
@@ -84,5 +84,5 @@ export async function adminDeleteProduct(url: string) {
   );
 
   revalidatePath("/admin");
-  return { success: true, message: `تم حذف المنتج وإزالته من سلال المستخدمين بنجاح` };
+  return { success: true, message: `The product has been deleted and removed from user carts successfully` };
 }

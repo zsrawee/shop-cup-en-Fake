@@ -18,13 +18,13 @@ export default function CheckoutForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-bold text-gray-700 mb-1">العنوان بالتفصيل</label>
+        <label className="block text-sm font-bold text-gray-700 mb-1">Detailed Address</label>
         <textarea 
           name="shippingAddress" 
           required
           rows={4}
           className="w-full border border-gray-300 p-3 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-          placeholder="المدينة، الحي، الشارع، رقم المبنى..."
+          placeholder="City, neighborhood, street, building number..."
         ></textarea>
       </div>
 
@@ -34,9 +34,9 @@ export default function CheckoutForm() {
         className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition shadow-md disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {isPending ? (
-          <span className="animate-pulse">جاري تأكيد الطلب...</span>
+          <span className="animate-pulse">Confirming order...</span>
         ) : (
-          "تأكيد الطلب 🎉"
+          "Confirm Order 🎉"
         )}
       </button>
     </form>

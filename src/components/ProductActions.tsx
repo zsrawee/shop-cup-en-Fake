@@ -12,7 +12,7 @@ export default function ProductActions({ productId }: { productId: string }) {
     startTransition(async () => {
       const res = await addToCartAction(productId);
       if (res?.success) {
-        setCartCount(res.newCartCount); // تحديث رقم السلة في النافبار فوراً
+        setCartCount(res.newCartCount); // Update cart count in Navbar immediately
       }
     });
   };
@@ -21,7 +21,7 @@ export default function ProductActions({ productId }: { productId: string }) {
     startTransition(async () => {
       const res = await toggleWishlistAction(productId);
       if (res?.success) {
-        setWishlistCount(res.newWishlistCount); // تحديث رقم المفضلة في النافبار فوراً
+        setWishlistCount(res.newWishlistCount); // Update wishlist count in Navbar immediately
       }
     });
   };
@@ -34,10 +34,10 @@ export default function ProductActions({ productId }: { productId: string }) {
         className="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {isPending ? (
-          <span className="animate-pulse">جاري الإضافة...</span>
+          <span className="animate-pulse">Adding...</span>
         ) : (
           <>
-            <span>أضف للسلة</span> 🛒
+            <span>Add to Cart</span> 🛒
           </>
         )}
       </button>
@@ -46,7 +46,7 @@ export default function ProductActions({ productId }: { productId: string }) {
         onClick={handleToggleWishlist} 
         disabled={isPending}
         className="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-100 transition disabled:opacity-50 border border-red-100"
-        title="أضف للمفضلة"
+        title="Add to Wishlist"
       >
         ❤️
       </button>

@@ -1,5 +1,5 @@
 "use server";
-// أضف هذا في أعلى الملف إذا لم يكن موجوداً
+// Add this at the top of the file if not present
 import { deleteImageFromServer } from "./deleteImage"; 
 import { auth } from "@/auth";
 import { connectToDB } from "@/lib/db";
@@ -10,12 +10,12 @@ import { redirect } from "next/navigation";
 
 export async function addProduct(formData: FormData) {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("غير مصرح لك");
+  if (!session?.user?.email) throw new Error("You are not authorized");
 
   await connectToDB();
   const user = await User.findOne({ email: session.user.email });
   if (!user || (user.role !== "seller" && user.role !== "admin")) {
-    throw new Error("يجب أن تكون بائعاً لإضافة منتجات");
+    throw new Error("You must be a seller to add products");
   }
 
   const title = formData.get("title") as string;
@@ -24,14 +24,14 @@ export async function addProduct(formData: FormData) {
   const stock = parseInt(formData.get("stock") as string);
 
   if (!title || isNaN(price)) {
-    throw new Error("الاسم والسعر صحيح مطلوبين");
+    throw new Error("Title and correct price are required");
   }
 
-  // 2. ✅ استخراج الصور (التعديل الجديد)
-  // نستخدم getAll لأننا نرسل عدة روابط بنفس الاسم "images" من الـ Client
+  // 2. ✅ Extract images (new edit)
+  // We use getAll because we send several links with the same name "images" from the Client
   const images = formData.getAll("images") as string[];
 
-  // 3. حفظ المنتج في قاعدة البيانات
+  // 3. Save product in database
   await connectToDB();
   
   await Product.create({
@@ -47,34 +47,34 @@ export async function addProduct(formData: FormData) {
 }
 
 
-// ✅ دالة حذف منتج مع صوره
+// ✅ Delete product with its images function
 export async function deleteProduct(productId: string) {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("غير مصرح لك");
+  if (!session?.user?.email) throw new Error("You are not authorized");
 
   await connectToDB();
 
-  // 1. نجلب المنتج للتأكد أنه يخص هذا البائع ولحذف صوره
+  // 1. Fetch product to ensure it belongs to this seller and to delete its images
   const product = await Product.findById(productId).populate("seller");
   
-  if (!product) throw new Error("المنتج غير موجود");
+  if (!product) throw new Error("Product not found");
   
-  // أمان: نتأكد أن من يحذف هو صاحب المنتج نفسه
+  // Security: Ensure the person deleting is the owner of the product itself
   if ((product.seller as any).email !== session.user.email) {
-    throw new Error("لا يمكنك حذف منتج لا يخصك");
+    throw new Error("You cannot delete a product that does not belong to you");
   }
 
-  // 2. حذف الصور من السيرفر المحلي
+  // 2. Delete images from local server
   if (product.images && product.images.length > 0) {
     for (const imgUrl of product.images) {
       await deleteImageFromServer(imgUrl);
     }
   }
 
-  // 3. حذف المنتج من قاعدة البيانات
+  // 3. Delete product from database
   await Product.findByIdAndDelete(productId);
 
-  // 4. تنظيف سلة ومفضلة المستخدمين
+  // 4. Clean up user carts and wishlists
   await User.updateMany(
     {},
     { 

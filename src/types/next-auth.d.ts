@@ -1,21 +1,21 @@
 import NextAuth, { DefaultSession } from "next-auth"
 
 declare module "next-auth" {
-  // تعديل واجهة الجلسة (Session)
+  // Modify Session interface
   interface Session {
     user: {
       username?: string | null
     } & DefaultSession["user"]
   }
 
-  // تعديل واجهة المستخدم (User)
+  // Modify User interface
   interface User {
     username?: string | null
   }
 }
 
 declare module "next-auth/jwt" {
-  // تعديل واجهة التوكن (JWT)
+  // Modify JWT interface
   interface JWT {
     username?: string | null
   }

@@ -15,7 +15,7 @@ export function AppProvider({ children, initialCart, initialWishlist }: { childr
   const [cartCount, setCartCount] = useState(initialCart);
   const [wishlistCount, setWishlistCount] = useState(initialWishlist);
 
-  // إذا حدث تحديث للصفحة (revalidate) وقيم السيرفر تغيرت، نحدث الـ State
+  // If a page update (revalidate) occurs and the server values change, we update the state
   useEffect(() => {
     setCartCount(initialCart);
   }, [initialCart]);

@@ -1,14 +1,14 @@
 import { z } from "zod";
 
-// قواعد تسجيل حساب جديد
+// Rules for registering a new account
 export const RegisterSchema = z.object({
-  name: z.string().min(3, "الاسم يجب أن يكون 3 حروف على الأقل"),
-  email: z.string().email("يرجى إدخال إيميل صحيح"),
-  password: z.string().min(8, "كلمة المرور يجب أن تكون 8 رموز على الأقل"),
+  name: z.string().min(3, "Name must be at least 3 characters long"),
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
-// قواعد تسجيل الدخول
+// Rules for logging in
 export const LoginSchema = z.object({
-  email: z.string().email("إيميل غير صالح"),
-  password: z.string().min(1, "كلمة المرور مطلوبة"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(1, "Password is required"),
 });

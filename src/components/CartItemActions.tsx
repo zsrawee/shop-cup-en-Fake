@@ -12,7 +12,7 @@ export default function CartItemActions({ productId, quantity }: { productId: st
     startTransition(async () => {
       const res = await removeFromCartAction(productId);
       if (res?.success) {
-        setCartCount(res.newCartCount); // تحديث رقم السلة في النافبار فوراً
+        setCartCount(res.newCartCount); // Update cart count in Navbar immediately
       }
     });
   };
@@ -21,7 +21,7 @@ export default function CartItemActions({ productId, quantity }: { productId: st
     startTransition(async () => {
       const res = await updateCartQuantityAction(productId, newQty);
       if (res?.success && newQty < 1) {
-        // إذا تم الحذف لأن الكمية وصلت لصفر
+        // If deleted because quantity reached zero
         setCartCount((res as any).newCartCount);
       }
     });
@@ -29,7 +29,7 @@ export default function CartItemActions({ productId, quantity }: { productId: st
 
   return (
     <div className="flex items-center gap-3">
-      {/* أزرار الكمية */}
+      {/* Quantity buttons */}
       <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
         <button 
           onClick={() => handleUpdateQty(quantity - 1)} 
@@ -48,13 +48,13 @@ export default function CartItemActions({ productId, quantity }: { productId: st
         </button>
       </div>
 
-      {/* زر الحذف */}
+      {/* Delete button */}
       <button 
         onClick={handleRemove} 
         disabled={isPending}
         className="text-red-500 hover:text-red-700 text-sm font-bold transition disabled:opacity-50"
       >
-        {isPending ? "جاري..." : "حذف ❌"}
+        {isPending ? "Updating..." : "Remove ❌"}
       </button>
     </div>
   );

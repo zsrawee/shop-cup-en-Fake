@@ -7,7 +7,7 @@ if (!MONGODB_URI) {
 }
 
 export const connectToDB = async () => {
-  // إذا كان متصل أصلاً، لا تفعل شيء
+  // If already connected, do nothing
   if (mongoose.connection.readyState >= 1) return;
 
   try {

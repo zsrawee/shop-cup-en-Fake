@@ -11,28 +11,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         await connectToDB();
         
-        // 1. البحث عن المستخدم بالإيميل
+        // 1. Search for user by email
         const email = credentials?.email as string;
         const user = await User.findOne({ email });
-        if (!user) throw new Error("المستخدم غير موجود");
+        if (!user) throw new Error("User not found");
 
-        // 2. التحقق من الباسورد (مقارنة المشفر)
+        // 2. Check password (compare hash)
         const isMatch = await bcrypt.compare(credentials.password as string, user.password);
-        if (!isMatch) throw new Error("كلمة المرور خطأ");
+        if (!isMatch) throw new Error("Incorrect password");
 
-        return user; // إذا كل شيء تمام، رجع بيانات المستخدم
+        return user; // If everything is fine, return user data
       },
     }),
   ],callbacks: {
     async session({ session, token }) {
-      // هنا نضيف الـ username للجلسة ليكون متاحاً في كل مكان
+      // Here we add the username to the session to be available everywhere
       if (token.username) {
         session.user.username = token.username as string;
       }
       return session;
     },
     async jwt({ token, user }) {
-      // عند أول تسجيل دخول، نأخذ الـ username من قاعدة البيانات ونضعه في الـ Token
+      // On first login, we take the username from the database and put it in the Token
       if (user) {
         token.username = user.username; 
       }
@@ -40,6 +40,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   pages: {
-    signIn: "/login", // الصفحة اللي بنسويها بعد شوي
+    signIn: "/login", // The page we will create in a bit
   },
 });

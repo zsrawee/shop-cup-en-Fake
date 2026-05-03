@@ -6,23 +6,23 @@ import { User } from "@/models/User";
 import { Product } from "@/models/Product";
 import { revalidatePath } from "next/cache";
 
-// 1. دالة تبديل حالة الأدمن
+// 1. Admin toggle function
 export async function toggleAdminRole() {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("يجب تسجيل الدخول أولاً");
+  if (!session?.user?.email) throw new Error("You must log in first");
 
   await connectToDB();
   const user = await User.findOne({ email: session.user.email });
-  if (!user) throw new Error("المستخدم غير موجود");
+  if (!user) throw new Error("User not found");
 
-  // تبديل الدور
+  // Toggle role
   user.role = user.role === "admin" ? "user" : "admin";
   
-  // إذا أصبح أدمن، نتأكد أنه يملك صلاحيات بائع أيضاً ليتمكن من إضافة منتجات
+  // If admin, ensure they have seller permissions as well to add products
   if (user.role === "admin" && !user.sellerInfo) {
     user.sellerInfo = {
-      storeName: "متجر الأدمن التجريبي",
-      description: "هذا حساب لتجربة النظام",
+      storeName: "Demo Admin Store",
+      description: "This is a system testing account",
       isVerified: true,
       rating: 5
     };
@@ -30,32 +30,32 @@ export async function toggleAdminRole() {
 
   await user.save();
   
-  // تحديث الواجهة بالكامل ليتغير الـ Navbar
+  // Refresh the entire UI to change the Navbar
   revalidatePath("/", "layout"); 
   return { success: true, newRole: user.role };
 }
 
-// 2. دالة توليد منتجات وهمية
+// 2. Seed fake products function
 export async function seedProducts(count: number) {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("يجب تسجيل الدخول أولاً");
+  if (!session?.user?.email) throw new Error("You must log in first");
 
   await connectToDB();
   const user = await User.findOne({ email: session.user.email });
-  if (!user) throw new Error("المستخدم غير موجود");
+  if (!user) throw new Error("User not found");
 
-  // نتأكد أن المستخدم بائع أو أدمن ليتم ربط المنتجات به
+  // Ensure the user is a seller or admin to link products to them
   if (user.role !== "seller" && user.role !== "admin") {
     user.role = "seller";
-    user.sellerInfo = { storeName: "متجر تجريبي", description: "وصف المتجر", isVerified: true, rating: 4.5 };
+    user.sellerInfo = { storeName: "Demo Store", description: "Store Description", isVerified: true, rating: 4.5 };
     await user.save();
   }
 
   const products = [];
   
-  // كلمات عربية لتوليد أسماء منتجات عشوائية ومتغيرة
-  const adjectives = ["أسود", "أبيض", "جميل", "ممتاز", "سريع", "جديد", "مستعمل", "صغير", "كبير"];
-  const nouns = ["لابتوب", "هاتف", "سماعات", "شاشة", "كيبورد", "ماوس", "طابعة", "كاميرا", "ساعة"];
+  // Words to generate random and variable product names
+  const adjectives = ["Black", "White", "Beautiful", "Excellent", "Fast", "New", "Used", "Small", "Large"];
+  const nouns = ["Laptop", "Phone", "Headphones", "Screen", "Keyboard", "Mouse", "Printer", "Camera", "Watch"];
 
   for (let i = 0; i < count; i++) {
     const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)];
@@ -63,18 +63,18 @@ export async function seedProducts(count: number) {
     const randomNum = Math.floor(Math.random() * 1000);
 
     products.push({
-      title: `منتج ${randomAdj} ${randomNoun} ${randomNum}`,
-      description: "هذا منتج تم إنشاؤه تلقائياً لاختبار أداء وتصميم المتجر. يمكنك حذفه من لوحة تحكم البائع أو الأدمن.",
-      price: Math.floor(Math.random() * 500) + 10, // سعر بين 10 و 510
+      title: `Product ${randomAdj} ${randomNoun} ${randomNum}`,
+      description: "This product was automatically generated to test the store's performance and design. You can delete it from the seller or admin dashboard.",
+      price: Math.floor(Math.random() * 500) + 10, // Price between 10 and 510
       stock: Math.floor(Math.random() * 100) + 1,
       seller: user._id,
-      category: "تجربة",
-      // صورة وهمية ثابتة من موقع placeholder
+      category: "Testing",
+      // Static fake image from placeholder site
       images: [`https://via.placeholder.com/300x300/0ea5e9/ffffff?text=Product+${i+1}`]
     });
   }
 
-  // إدخال المنتجات دفعة واحدة في الداتابيز (أسرع طريقة)
+  // Insert products in bulk in the database (fastest way)
   await Product.insertMany(products);
 
   revalidatePath("/products");

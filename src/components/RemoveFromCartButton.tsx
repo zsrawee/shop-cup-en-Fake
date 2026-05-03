@@ -11,7 +11,7 @@ export default function RemoveFromCartButton({ productId }: { productId: string 
       disabled={isPending}
       className="text-red-500 hover:text-red-700 text-sm font-bold disabled:opacity-50"
     >
-      {isPending ? "جاري..." : "حذف ❌"}
+      {isPending ? "Removing..." : "Remove ❌"}
     </button>
   );
 }

@@ -5,10 +5,10 @@ import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 
 export async function deleteImageFromServer(imageUrl: string) {
-  if (!imageUrl) return { success: false, message: "لا يوجد رابط" };
+  if (!imageUrl) return { success: false, message: "No link provided" };
 
   try {
-    // 1. إذا كانت الصورة من Cloudinary ☁️
+    // 1. If the image is from Cloudinary ☁️
     if (imageUrl.includes("cloudinary.com")) {
       const parts = imageUrl.split("/upload/");
       if (parts.length >= 2) {
@@ -23,7 +23,7 @@ export async function deleteImageFromServer(imageUrl: string) {
       }
     }
 
-    // 2. إذا كانت الصورة محلية (مسار قديم يبدأ بـ /imag/)
+    // 2. If the image is local (old path starting with /imag/)
     if (imageUrl.startsWith("/imag/")) {
       const absolutePath = path.join(process.cwd(), "public", imageUrl);
       
@@ -32,15 +32,15 @@ export async function deleteImageFromServer(imageUrl: string) {
         return { success: true };
       } catch (error: any) {
         if (error.code === "ENOENT") {
-          return { success: true, message: "Цالصورة غير موجودة أصلاً" };
+          return { success: true, message: "Image does not exist" };
         }
         throw error;
       }
     }
 
-    return { success: false, message: "رابط الصورة غير مدعوم" };
+    return { success: false, message: "Image link not supported" };
   } catch (error) {
-    console.error("خطأ أثناء حذف الصورة:", error);
-    return { success: false, message: "فشل حذف الصورة" };
+    console.error("Error deleting image:", error);
+    return { success: false, message: "Failed to delete image" };
   }
 }

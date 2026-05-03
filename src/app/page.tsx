@@ -17,24 +17,24 @@ export default async function Home() {
         {/* Text Content */}
         <div className="relative z-10 flex-1 text-center lg:text-right">
           <h1 className="text-5xl lg:text-7xl font-extrabold text-foreground tracking-tight mb-6">
-            اكتشف أحدث <br />
-            <span className="text-gradient">المنتجات الرائعة</span>
+            Discover the Latest <br />
+            <span className="text-gradient">Amazing Products</span>
           </h1>
           <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-            منصتك الأولى للتسوق الإلكتروني. تسوق من أفضل البائعين أو ابدأ متجرك الخاص بكل سهولة وسرعة، وتمتع بتجربة شراء لا تُنسى.
+            Your premier platform for online shopping. Shop from the best sellers or start your own store with ease and speed, and enjoy an unforgettable shopping experience.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <Link 
               href="/products" 
               className="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-hover text-white rounded-2xl font-bold text-lg shadow-xl shadow-blue-500/30 transform transition hover:-translate-y-1"
             >
-              تسوق الآن 🛍️
+              Shop Now 🛍️
             </Link>
             <Link 
               href="/seller/change" 
               className="w-full sm:w-auto px-8 py-4 glass text-foreground rounded-2xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition"
             >
-              كن بائعاً 🏪
+              Be a Seller 🏪
             </Link>
           </div>
         </div>
@@ -46,7 +46,7 @@ export default async function Home() {
             {/* Visual placeholder since we don't have actual hero image */}
             <div className="text-center">
               <span className="text-9xl block mb-4">✨</span>
-              <h3 className="text-2xl font-bold text-foreground">الجودة أولاً</h3>
+              <h3 className="text-2xl font-bold text-foreground">Quality First</h3>
             </div>
           </div>
         </div>
