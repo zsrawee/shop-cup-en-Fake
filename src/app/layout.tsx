@@ -1,4 +1,4 @@
-import { AppProvider } from "@/context/AppContext";
+import { Providers } from "@/components/Providers";
 import Navbar from "@/components/navBar";
 import { auth } from "@/auth";
 import { connectToDB } from "@/lib/db";
@@ -10,7 +10,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let initialWishlistCount = 0;
   let isLoggedIn = false;
   let username = "";
-  let role = "user"; // ✅ Added the variable
+  let role = "user";
 
   const session = await auth();
   
@@ -22,18 +22,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       initialCartCount = user.cart?.length || 0;
       initialWishlistCount = user.wishlist?.length || 0;
       username = user.username;
-      role = user.role; // ✅ Fetch the role (user, seller, admin)
+      role = user.role;
     }
   }
 
   return (
     <html lang="en">
       <body>
-        <AppProvider initialCart={initialCartCount} initialWishlist={initialWishlistCount}>
-          {/* ✅ Pass the role to the Navbar */}
+        <Providers initialCart={initialCartCount} initialWishlist={initialWishlistCount}>
           <Navbar isLoggedIn={isLoggedIn} username={username} role={role} />
           <main className="min-h-screen">{children}</main>
-        </AppProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -79,7 +79,7 @@ export default async function ProductsPage({
     .lean();
 
   return (
-    <div className="max-w-7xl mx-auto p-6 min-h-screen" dir="rtl">
+    <div className="max-w-7xl mx-auto p-6 min-h-screen" dir="ltr">
       
       {/* === Page Header and Search Bar === */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-
+import { isMock } from '@/lib/db';
+import { createMockModel } from '@/lib/mockFactory';
+import { mockOrders } from '@/lib/mockData';
 
 const OrderSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -7,7 +9,7 @@ const OrderSchema = new mongoose.Schema({
     {
       product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       quantity: Number,
-      price: Number // We store the price at the time of purchase because it might change later
+      price: Number // Price at time of purchase
     }
   ],
   totalAmount: Number,
@@ -21,4 +23,6 @@ const OrderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export const Order = mongoose.models.Order || mongoose.model('Order', OrderSchema);
+const RealOrder = mongoose.models.Order || mongoose.model('Order', OrderSchema);
+
+export const Order = isMock ? (createMockModel(mockOrders, "Order") as any) : RealOrder;

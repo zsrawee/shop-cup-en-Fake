@@ -16,11 +16,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const user = await User.findOne({ email });
         if (!user) throw new Error("User not found");
 
-        // 2. Check password (compare hash)
-        const isMatch = await bcrypt.compare(credentials.password as string, user.password);
-        if (!isMatch) throw new Error("Incorrect password");
+        const isMock = !process.env.MONGODB_URI;
 
-        return user; // If everything is fine, return user data
+        // 2. Check password (bypass if in mock mode)
+        if (!isMock) {
+          const isMatch = await bcrypt.compare(credentials.password as string, user.password);
+          if (!isMatch) throw new Error("Incorrect password");
+        }
+
+        return user; // Success
       },
     }),
   ],callbacks: {

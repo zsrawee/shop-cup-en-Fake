@@ -27,7 +27,7 @@ export default async function PublicProfile({ params }: { params: { username: st
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center" dir="rtl">
+    <div className="min-h-screen bg-gray-50 p-8 flex flex-col items-center" dir="ltr">
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
         
         {/* === Profile Header Section === */}

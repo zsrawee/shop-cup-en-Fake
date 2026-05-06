@@ -1,1 +1,1 @@
-afsfsefr
+npm i and npm run dev but you need monodb thank for see my codey

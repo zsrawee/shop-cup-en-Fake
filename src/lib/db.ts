@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+export const isMock = !process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+if (isMock) {
+  console.warn("⚠️ MONGODB_URI is not defined. Switching to MOCK MODE.");
 }
 
+const MONGODB_URI = process.env.MONGODB_URI || "";
+
 export const connectToDB = async () => {
+  if (isMock) return;
+
   // If already connected, do nothing
   if (mongoose.connection.readyState >= 1) return;
 
@@ -16,4 +20,4 @@ export const connectToDB = async () => {
   } catch (error) {
     console.error("❌ MongoDB connection error:", error);
   }
-};
+};

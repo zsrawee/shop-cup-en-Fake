@@ -14,7 +14,7 @@ export default async function TestingPage() {
   const user = await User.findOne({ email: session.user.email }).lean();
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8" dir="rtl">
+    <div className="min-h-screen bg-gray-950 text-white p-8" dir="ltr">
       <div className="max-w-4xl mx-auto">
         
         <div className="mb-8">

@@ -23,7 +23,7 @@ export default async function AddProductPage() {
   const isSeller = user.role === "seller";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4" dir="rtl">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4" dir="ltr">
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
         <h1 className="text-2xl font-extrabold text-gray-900 mb-6">Add New Product</h1>
 

@@ -25,7 +25,7 @@ export default async function ProductDetails({ params }) {
   const seller = product.seller;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10" dir="rtl">
+    <div className="min-h-screen bg-gray-50 py-10" dir="ltr">
       <div className="max-w-6xl mx-auto px-4">
         
         {/* Back to store button */}
@@ -113,7 +113,7 @@ export default async function ProductDetails({ params }) {
                       {seller.avatar ? (
                         <img src={seller.avatar} alt={seller.name} className="w-full h-full object-cover" />
                       ) : (
-                        seller.name.charAt(0)
+                        seller?.name?.charAt(0) || "U"
                       )}
                     </div>
                     <div>

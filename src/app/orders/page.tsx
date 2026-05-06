@@ -51,7 +51,7 @@ export default async function OrdersPage() {
     .lean();
 
   return (
-    <div className="max-w-4xl mx-auto p-6 min-h-screen" dir="rtl">
+    <div className="max-w-4xl mx-auto p-6 min-h-screen" dir="ltr">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-8">My Orders 📦</h1>
 
       {orders.length === 0 ? (

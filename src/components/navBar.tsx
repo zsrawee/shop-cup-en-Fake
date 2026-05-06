@@ -43,7 +43,7 @@ export default function Navbar({
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16" dir="rtl">
+        <div className="flex justify-between items-center h-16" dir="ltr">
           
           {/* Logo */}
           <Link href="/" className="text-xl font-extrabold text-blue-600">
@@ -99,7 +99,7 @@ export default function Navbar({
 
       {/* === Side Menu (Drawer) for Mobile === */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden" dir="rtl">
+        <div className="fixed inset-0 z-50 md:hidden" dir="ltr">
           {/* Dimmed background */}
           <div className="absolute inset-0 bg-black/50" onClick={() => setIsDrawerOpen(false)}></div>
           

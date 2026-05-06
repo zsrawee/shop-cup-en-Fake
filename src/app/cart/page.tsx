@@ -31,7 +31,7 @@ export default async function CartPage() {
   }, 0);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 min-h-screen" dir="rtl">
+    <div className="max-w-4xl mx-auto p-6 min-h-screen" dir="ltr">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Shopping Cart 🛒</h1>
 
       {validCartItems.length === 0 ? (
@@ -54,7 +54,7 @@ export default async function CartPage() {
           <div className="lg:col-span-2 space-y-4">
             {validCartItems.map((item: any) => (
               <div 
-                key={item.product._id.toString()} 
+                key={item.product?._id?.toString() || Math.random().toString()} 
                 className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition"
               >
                 {/* Product Image */}
@@ -74,7 +74,7 @@ export default async function CartPage() {
                   {/* Quantity and delete buttons (Client Component) */}
                   <div className="mt-2">
                     <CartItemActions 
-                      productId={item.product._id.toString()} 
+                      productId={item.product?._id?.toString() || ""} 
                       quantity={item.quantity} 
                     />
                   </div>

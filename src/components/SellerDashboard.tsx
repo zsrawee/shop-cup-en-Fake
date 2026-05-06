@@ -17,7 +17,7 @@ export default function SellerDashboard({ user, products }: { user: any; product
   };
 
   return (
-    <div className="space-y-8" dir="rtl">
+    <div className="space-y-8" dir="ltr">
       
       {/* === Dashboard Header and Welcome === */}
       <div className="bg-gradient-to-l from-blue-600 to-indigo-700 p-8 rounded-3xl text-white shadow-lg">

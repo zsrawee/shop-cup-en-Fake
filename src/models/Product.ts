@@ -1,5 +1,7 @@
-
 import mongoose from 'mongoose';
+import { isMock } from '@/lib/db';
+import { createMockModel } from '@/lib/mockFactory';
+import { mockProducts } from '@/lib/mockData';
 
 interface IProductDocument extends mongoose.Document {
   title: string;
@@ -25,8 +27,6 @@ interface IProductModel extends mongoose.Model<IProductDocument> {
   calculateAverage(productId: string): Promise<void>;
 }
 
-
-
 const ProductSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -35,32 +35,32 @@ const ProductSchema = new mongoose.Schema({
   category: String,
   stock: { type: Number, default: 0 },
   
-  // Linking to the seller (this is the bridge)
+  // Linking to the seller
   seller: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true 
   },
   
-// Ratings system
+  // Ratings system
   ratings: [
     {
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      userName: String, // Storing the name here reduces populate calls and speeds up display
+      userName: String, 
       rating: { type: Number, required: true, min: 1, max: 5 },
       comment: String,
       createdAt: { type: Date, default: Date.now }
     }
   ],
   
-  // Stored fields for query speed (Denormalization)
-  averageRating: { type: Number, default: 0 }, // Average stars (e.g., 4.5)
-  numberOfReviews: { type: Number, default: 0 }, // Total number of people who rated
+  // Stored fields for query speed
+  averageRating: { type: Number, default: 0 },
+  numberOfReviews: { type: Number, default: 0 },
 
   createdAt: { type: Date, default: Date.now }
 });
 
-// Define the function inside Statics in your Schema
+// Calculate average rating
 ProductSchema.statics.calculateAverage = async function(productId: string) {
   const product = await this.findById(productId);
 
@@ -74,7 +74,6 @@ ProductSchema.statics.calculateAverage = async function(productId: string) {
       numberOfReviews
     });
   } else {
-    // In case all ratings are deleted, we reset the values
     await this.findByIdAndUpdate(productId, {
       averageRating: 0,
       numberOfReviews: 0
@@ -83,8 +82,9 @@ ProductSchema.statics.calculateAverage = async function(productId: string) {
 };
 
 ProductSchema.post('save', async function() {
- 
   await (this.constructor as IProductModel).calculateAverage(this._id.toString());
 });
 
-export const Product = (mongoose.models.Product || mongoose.model('Product', ProductSchema)) as IProductModel;
+const RealProduct = (mongoose.models.Product || mongoose.model('Product', ProductSchema)) as IProductModel;
+
+export const Product = isMock ? (createMockModel(mockProducts, "Product") as unknown as IProductModel) : RealProduct;

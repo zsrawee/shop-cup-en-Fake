@@ -1,4 +1,7 @@
 import mongoose, { Schema, Document, Model, Types } from 'mongoose';
+import { isMock } from '@/lib/db';
+import { createMockModel } from '@/lib/mockFactory';
+import { mockUsers } from '@/lib/mockData';
 
 // === TypeScript Interfaces ===
 
@@ -82,11 +85,12 @@ const UserSchema = new Schema<IUserDocument, IUserModel>({
   createdAt: { type: Date, default: Date.now }
 });
 
-// If you want to see the seller's products inside the user object programmatically
 UserSchema.virtual('products', {
   ref: 'Product',
   localField: '_id',
   foreignField: 'seller'
 });
 
-export const User = (mongoose.models.User as IUserModel) || mongoose.model<IUserDocument, IUserModel>('User', UserSchema);
+const RealUser = (mongoose.models.User as IUserModel) || mongoose.model<IUserDocument, IUserModel>('User', UserSchema);
+
+export const User = isMock ? (createMockModel(mockUsers, "User") as unknown as IUserModel) : RealUser;

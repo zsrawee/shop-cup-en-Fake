@@ -5,7 +5,7 @@ export default async function Home() {
   await connectToDB();
   
   return (
-    <main className="min-h-[calc(100vh-64px)] overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" dir="rtl">
+    <main className="min-h-[calc(100vh-64px)] overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" dir="ltr">
       {/* Hero Section */}
       <div className="relative pt-20 pb-32 lg:pt-32 lg:pb-48 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
         

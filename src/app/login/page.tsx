@@ -45,7 +45,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 font-sans" dir="rtl">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 font-sans" dir="ltr">
       <form
         action={handleLogin}
         className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl transition-all duration-300"

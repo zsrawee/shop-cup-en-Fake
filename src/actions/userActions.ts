@@ -20,7 +20,7 @@ export async function updateCartQuantityAction(productId: string, quantity: numb
   const user = await User.findOne({ email: session.user.email });
   if (!user) throw new Error("User not found");
 
-  const item = user.cart.find((item: any) => item.product.toString() === productId);
+  const item = user.cart.find((item: any) => item.product?.toString() === productId);
   if (item) {
     item.quantity = quantity;
     await user.save();
@@ -38,7 +38,7 @@ export async function addToCartAction(productId: string, quantity: number = 1) {
   const user = await User.findOne({ email: session.user.email });
   if (!user) throw new Error("User not found");
 
-  const existingItem = user.cart.find((item: any) => item.product.toString() === productId);
+  const existingItem = user.cart.find((item: any) => item.product?.toString() === productId);
   
   if (existingItem) {
     existingItem.quantity += quantity;
@@ -62,7 +62,7 @@ export async function removeFromCartAction(productId: string) {
   const user = await User.findOne({ email: session.user.email });
   if (!user) throw new Error("User not found");
   
-  user.cart = user.cart.filter((item: any) => item.product.toString() !== productId);
+  user.cart = user.cart.filter((item: any) => item.product?.toString() !== productId);
   await user.save();
   
   revalidatePath("/cart");

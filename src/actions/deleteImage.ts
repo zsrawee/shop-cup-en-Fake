@@ -3,12 +3,18 @@
 import fs from "fs/promises";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
+import { isMock } from "@/lib/db";
 
 export async function deleteImageFromServer(imageUrl: string) {
   if (!imageUrl) return { success: false, message: "No link provided" };
 
+  if (isMock) {
+    console.warn("⚠️ [MOCK] Bypassing image deletion.");
+    return { success: true };
+  }
+
   try {
-    // 1. If the image is from Cloudinary ☁️
+    // 1. If the image is from Cloudinary
     if (imageUrl.includes("cloudinary.com")) {
       const parts = imageUrl.split("/upload/");
       if (parts.length >= 2) {
@@ -23,7 +29,7 @@ export async function deleteImageFromServer(imageUrl: string) {
       }
     }
 
-    // 2. If the image is local (old path starting with /imag/)
+    // 2. If the image is local
     if (imageUrl.startsWith("/imag/")) {
       const absolutePath = path.join(process.cwd(), "public", imageUrl);
       
